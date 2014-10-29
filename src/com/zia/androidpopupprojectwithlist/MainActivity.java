@@ -57,11 +57,8 @@ public class MainActivity extends Activity {
 	private void initiatePopupWindow() {
 		try {
 			// Listview Data
-			String products[] = { "Dell Inspiron", "HTC One X",
-					"HTC Wildfire S", "HTC Sense", "HTC Sensation XE",
-					"iPhone 4S", "Samsung Galaxy Note 800",
-					"Samsung Galaxy S3", "MacBook Air", "Mac Mini",
-					"MacBook Pro" };
+			
+			String products[] = getResources().getStringArray(R.array.Spinner_Country);
 			// We need to get the instance of the LayoutInflater, use the
 			// context of this activity
 			LayoutInflater inflater = (LayoutInflater) MainActivity.this
