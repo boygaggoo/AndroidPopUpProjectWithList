@@ -93,10 +93,17 @@ public class MainActivity extends Activity implements OnItemClickListener {
 			// lv = (ListView) layout.findViewById(R.id.list_view);
 			listview = (ListView) layout.findViewById(R.id.list_view);
 			items.add(new SectionItem("My Friends"));
+<<<<<<< HEAD
 			items.add(new EntryItem("Zia"));
 			items.add(new EntryItem("Anum"));
 			items.add(new EntryItem("Nazish"));
 			items.add(new EntryItem("salman"));
+=======
+			items.add(new EntryItem("Abhi Tripathi"));
+			items.add(new EntryItem("Sandeep Pal"));
+			items.add(new EntryItem("Amit Verma"));
+			items.add(new EntryItem("Awadhesh Diwaker "));
+>>>>>>> FETCH_HEAD
 
 			items.add(new SectionItem("Android Version"));
 			items.add(new EntryItem("Jelly Bean"));
