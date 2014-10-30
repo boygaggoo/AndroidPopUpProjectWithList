@@ -16,21 +16,28 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnItemClickListener {
+
+	ArrayList<item> items = new ArrayList<item>();
+	ListView listview = null;
+
+	EntryAdapter adapter;
+
+	// ///////////
 	Button popUpButton;
 	PopupWindow pw;
 	// List view
-	private ListView lv;
+	// private ListView lv;
 
 	// Listview Adapter
-	ArrayAdapter<String> adapter;
+	// ArrayAdapter<String> adapter;
 
 	// Search EditText
 	EditText inputSearch;
@@ -57,8 +64,9 @@ public class MainActivity extends Activity {
 	private void initiatePopupWindow() {
 		try {
 			// Listview Data
-			
-			String products[] = getResources().getStringArray(R.array.Spinner_Country);
+
+			String products[] = getResources().getStringArray(
+					R.array.Spinner_Country);
 			// We need to get the instance of the LayoutInflater, use the
 			// context of this activity
 			LayoutInflater inflater = (LayoutInflater) MainActivity.this
@@ -82,13 +90,34 @@ public class MainActivity extends Activity {
 
 			});
 			// ////////
-			lv = (ListView) layout.findViewById(R.id.list_view);
-			inputSearch = (EditText) layout.findViewById(R.id.inputSearch);
+			// lv = (ListView) layout.findViewById(R.id.list_view);
+			listview = (ListView) layout.findViewById(R.id.list_view);
+			items.add(new SectionItem("My Friends"));
+			items.add(new EntryItem("Zia"));
+			items.add(new EntryItem("Anum"));
+			items.add(new EntryItem("Nazish"));
+			items.add(new EntryItem("salman"));
 
+			items.add(new SectionItem("Android Version"));
+			items.add(new EntryItem("Jelly Bean"));
+			items.add(new EntryItem("IceCream Sandwich"));
+			items.add(new EntryItem("Honey Comb"));
+			items.add(new EntryItem("Ginger Bread "));
+
+			items.add(new SectionItem("Android Phones"));
+			items.add(new EntryItem("Samsung"));
+			items.add(new EntryItem("Sony Ericson"));
+			items.add(new EntryItem("Nokiya"));
+
+			inputSearch = (EditText) layout.findViewById(R.id.inputSearch);
+			adapter = new EntryAdapter(this, items);
+			listview.setAdapter(adapter);
+			listview.setOnItemClickListener(this);
+			listview.setTextFilterEnabled(true);
 			// Adding items to listview
-			adapter = new ArrayAdapter<String>(this, R.layout.list_item,
-					R.id.product_name, products);
-			lv.setAdapter(adapter);
+			// adapter = new ArrayAdapter<String>(this, R.layout.list_item,
+			// R.id.product_name, products);
+			// lv.setAdapter(adapter);
 
 			/**
 			 * Enabling Search Filter
@@ -96,16 +125,23 @@ public class MainActivity extends Activity {
 			inputSearch.addTextChangedListener(new TextWatcher() {
 
 				@Override
-				public void onTextChanged(CharSequence cs, int arg1, int arg2,
-						int arg3) {
+				public void onTextChanged(CharSequence cs, int start,
+						int before, int count) {
 					// When user changed the Text
-					MainActivity.this.adapter.getFilter().filter(cs);
+					if (count < before) {
+						// We're deleting char so we need to reset the adapter
+						// data
+						adapter.resetData();
+					}
+
+					adapter.getFilter().filter(cs.toString());
+					// MainActivity.this.adapter.getFilter().filter(cs);
 				}
 
 				@Override
 				public void beforeTextChanged(CharSequence arg0, int arg1,
 						int arg2, int arg3) {
-					// 
+					//
 
 				}
 
@@ -114,17 +150,21 @@ public class MainActivity extends Activity {
 					//
 				}
 			});
-			lv.setOnItemClickListener(new OnItemClickListener() {
+			listview.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int arg2, long arg3) {
-					
-					TextView v = (TextView) arg1.findViewById(R.id.product_name);
+
+					TextView v = (TextView) arg1
+							.findViewById(R.id.product_name);
 					arg1.setBackgroundColor(Color.GREEN);
-					
-					String text = ((TextView) arg1.findViewById(R.id.product_name)).getText().toString() ;
-					System.out.println(arg2 + "=postion="+v.getText()+"String="+text);
+
+					String text = ((TextView) arg1
+							.findViewById(R.id.product_name)).getText()
+							.toString();
+					System.out.println(arg2 + "=postion=" + v.getText()
+							+ "String=" + text);
 				}
 			});
 
@@ -134,22 +174,13 @@ public class MainActivity extends Activity {
 
 	}
 
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// // Inflate the menu; this adds items to the action bar if it is present.
-	// getMenuInflater().inflate(R.menu.main, menu);
-	// return true;
-	// }
-	//
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// // Handle action bar item clicks here. The action bar will
-	// // automatically handle clicks on the Home/Up button, so long
-	// // as you specify a parent activity in AndroidManifest.xml.
-	// int id = item.getItemId();
-	// if (id == R.id.action_search) {
-	// return true;
-	// }
-	// return super.onOptionsItemSelected(item);
-	// }
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		EntryItem item = (EntryItem) items.get(position);
+		Toast.makeText(this, "You clicked " + item.title, Toast.LENGTH_SHORT)
+				.show();
+
+	}
+
 }
